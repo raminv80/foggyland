@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141206091317) do
+ActiveRecord::Schema.define(version: 20141206091427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20141206091317) do
     t.decimal  "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.hstore   "parameters"
   end
 
   add_index "air_quality_indices", ["observe_date"], name: "index_air_quality_indices_on_observe_date", using: :btree
