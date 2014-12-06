@@ -33,3 +33,7 @@ gem 'httparty'
 
 # Use grape to publish api
 gem 'grape'
+
+group :development do
+  gem 'pry-rails'
+end
