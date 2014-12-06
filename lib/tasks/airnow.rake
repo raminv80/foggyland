@@ -1,7 +1,7 @@
 namespace :airnow do
   desc 'fetch by year'
   task :fetch, [:year] do |t, params|
-    City.find.each do |city|
+    City.find_each do |city|
       context = Contexts::AirQualityIndicesExtraction.new(API::Airnow.new, AirQualityIndex)
       zip_code = city.zip_codes.first
       (1..12).each do |month|
@@ -12,6 +12,7 @@ namespace :airnow do
 
   desc 'fetch AQI of one zip code for all cities'
   task :fetch_async, [:year] do |t, params|
+    binding.pry
     City.includes(:zip_codes).find_each do |city|
       Workers::AirQualityIndicesExtraction.perform_year(city.zip_codes.first.id, params[:year].to_i)
     end
