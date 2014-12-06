@@ -31,6 +31,7 @@ gem 'grape'
 
 # Use sidekiq to handle data crawling job
 gem 'sidekiq'
+gem 'sinatra'
 
 group :development do
   gem 'pry-rails'

@@ -13,7 +13,7 @@ namespace :airnow do
   desc 'fetch AQI of one zip code for all cities'
   task :fetch_async, [:year] do |t, params|
     City.includes(:zip_codes).find_each do |city|
-      Workers::AirQualityIndexExtraction.perform_year(city.zip_codes.first.id, params[:year].to_i)
+      Workers::AirQualityIndicesExtraction.perform_year(city.zip_codes.first.id, params[:year].to_i)
     end
   end
 

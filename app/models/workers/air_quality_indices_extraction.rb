@@ -1,10 +1,10 @@
 module Workers
-  class AirQualityIndexExtraction
+  class AirQualityIndicesExtraction
     include Sidekiq::Worker
 
     def perform(zip_code_id, date)
       zip_code = ZipCode.find(zip_code_id)
-      context = Contexts::AirQualityIndexExtraction.new(API::Airnow.new, AirQualityIndex)
+      context = Contexts::AirQualityIndicesExtraction.new(API::Airnow.new, AirQualityIndex)
       context.execute(zip_code, date)
     end
 
