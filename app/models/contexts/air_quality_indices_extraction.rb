@@ -24,7 +24,7 @@ module Contexts
         create!(
           zip_code: zip_code, observe_date: result['date_observed'],
           latitude: result['latitude'], longitude: result['longitude'],
-          ozone: ['ozone'].to_json,
+          ozone: result['ozone'].to_json,
           pm2_5: result['pm2.5'].to_json,
           pm10: result['pm10'].to_json
         )

@@ -13,17 +13,12 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
 gem 'unicorn'
-
-# Use Capistrano for deployment
-gem 'capistrano-rails', group: :development
 
 # Use figaro for retrieving env variables
 gem 'figaro'
@@ -34,6 +29,11 @@ gem 'httparty'
 # Use grape to publish api
 gem 'grape'
 
+# Use sidekiq to handle data crawling job
+gem 'sidekiq'
+
 group :development do
   gem 'pry-rails'
+  gem 'capistrano-rails'
+  gem 'spring'
 end
