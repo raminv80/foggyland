@@ -6,27 +6,49 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'csv'
-
-capitals = [
-  'Trenton', 'Topeka', 'Tallahassee', 'Springfield', 'Santa Fe',
-  'Salt Lake City', 'Salem', 'Saint Paul', 'Sacramento', 'Richmond',
-  'Raleigh', 'Providence', 'Pierre', 'Phoenix', 'Olympia', 'Oklahoma City',
-  'Nashville', 'Montpelier', 'Montgomery', 'Madison', 'Little Rock', 'Lincoln',
-  'Lansing', 'Juneau', 'Jefferson City', 'Jackson', 'Indianapolis', 'Honolulu',
-  'Helena', 'Hartford', 'Harrisburg', 'Frankfort', 'Dover', 'Des Moines',
-  'Denver', 'Concord', 'Columbus', 'Columbia', 'Cheyenne', 'Charleston',
-  'Carson City', 'Boston', 'Boise', 'Bismarck', 'Baton Rouge', 'Austin',
-  'Augusta', 'Atlanta', 'Annapolis', 'Albany'
+state_codes = [
+  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN',
+  'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV',
+  'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN',
+  'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
 ]
-country = Country.create(name: 'United States')
+state_names = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
+  'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
+  'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+  'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+  'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma',
+  'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+  'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+]
+capitals = [
+  'Montgomery', 'Juneau', 'Phoenix', 'Little Rock', 'Sacramento', 'Denver',
+  'Hartford', 'Dover', 'Tallahassee', 'Atlanta', 'Honolulu', 'Boise',
+  'Springfield', 'Indianapolis', 'Des Moines', 'Topeka', 'Frankfort',
+  'Baton Rouge', 'Augusta', 'Annapolis', 'Boston', 'Lansing', 'Saint Paul',
+  'Jackson', 'Jefferson City', 'Helena', 'Lincoln', 'Carson City', 'Concord',
+  'Trenton', 'Santa Fe', 'Albany', 'Raleigh', 'Bismarck', 'Columbus',
+  'Oklahoma City', 'Salem', 'Harrisburg', 'Providence', 'Columbia', 'Pierre',
+  'Nashville', 'Austin', 'Salt Lake City', 'Montpelier', 'Richmond', 'Olympia',
+  'Charleston', 'Madison', 'Cheyenne'
+]
+country = Country.find_or_create_by(name: 'United States')
 
-CSV.foreach("#{Rails.root}/db/zipcodes.csv", headers: false) do |row|
-  next if row.empty?
-
+CSV.foreach("#{Rails.root}/db/zipcodes.csv", headers: false, skip_blanks: true) do |row|
   zip_code, city_name, state_code = row
-  state = country.states.find_or_create_by(code: state_code)
-  city = state.cities.find_or_create_by(name: city_name)
-  city.zip_codes.create(code: zip_code)
+  state = State.find_or_create_by(code: state_code, country: country)
+  city = City.find_or_create_by(name: city_name, state: state)
+  ZipCode.create(code: zip_code, city: city)
 end
 
-City.where(name: capitals).update_all(capital: true)
+(0...50).each do |i|
+  City
+    .joins(:state)
+    .where(name: capitals[i], states: { code: state_codes[i] })
+    .first
+    .update(capital: true)
+  State.where(code: state_codes[i]).first.update(name: state_names[i])
+end
