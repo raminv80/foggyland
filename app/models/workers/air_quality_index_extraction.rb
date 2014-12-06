@@ -10,7 +10,7 @@ module Workers
 
     def self.perform_year(zip_code_id, year)
       (1..12).each do |month|
-        self.class.perform_async(zip_code_id, DateTime.new(year, month, 1))
+        perform_async(zip_code_id, DateTime.new(year, month, 1))
       end
     end
   end
