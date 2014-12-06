@@ -5,7 +5,7 @@ module Workers
     def perform(zip_code_id, date)
       zip_code = ZipCode.find(zip_code_id)
       context = Contexts::AirQualityIndicesExtraction.new(API::Airnow.new, AirQualityIndex)
-      context.execute(zip_code, date)
+      context.execute(zip_code, date.to_datetime)
     end
 
     def self.perform_year(zip_code_id, year)
