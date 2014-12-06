@@ -12,7 +12,8 @@ module API
           date: date_param,
           API_KEY: api_keys.sample
         }
-      self.class.get('/', options)
+      results = self.class.get('/', options)
+      Hash[results.map { |r| [r['ParameterName', r]] }]
     end
 
     def api_keys
