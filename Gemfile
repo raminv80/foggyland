@@ -33,6 +33,8 @@ gem 'grape'
 gem 'sidekiq'
 gem 'sinatra'
 
+gem 'd3-rails'
+
 group :development do
   gem 'pry-rails'
   gem 'capistrano-rails'
